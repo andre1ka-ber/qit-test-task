@@ -21,7 +21,7 @@ import { Component, Watch, Emit, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import { InvoiceInterface } from "@/entities/InvoiceInterface";
 
-import InvoicesCalculatorForm from "@/components/InvoicesCalculatorForm.vue";
+import InvoicesCalculatorForm from "@/components/InvoiceCalculatorForm.vue";
 import InvoiceCalculatorTable from "@/components/InvoiceCalculatorTable.vue";
 
 const invoicesState = namespace("invoices");
