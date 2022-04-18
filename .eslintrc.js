@@ -13,5 +13,8 @@ module.exports = {
     "prefer-const": "error",
     "vuejs-accessibility/form-control-has-label": "off",
     quotes: ["error", "double"],
+    "no-param-reassign": "off",
+    "max-len": "off",
+    "object-curly-newline": "off",
   },
 };
