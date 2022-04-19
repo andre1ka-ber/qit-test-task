@@ -1,5 +1,7 @@
 <template>
-  <button class="invoice-calculator__button" @click="removeInvoicesHandler">Delete</button>
+  <button class="invoice-calculator__button" @click="removeInvoicesHandler" :disabled="noCheckedInvoices">
+    Delete
+  </button>
 </template>
 
 <script lang="ts">
@@ -18,6 +20,10 @@ export default class InvoiceCalculatorDeleteButton extends Vue {
 
   public removeInvoicesHandler() {
     this.removeInvoicesFromStore(this.checkedInvoiceIds);
+  }
+
+  get noCheckedInvoices() {
+    return this.checkedInvoiceIds.length === 0;
   }
 }
 </script>

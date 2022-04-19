@@ -10,6 +10,12 @@ button {
   }
 }
 
+button[disabled=disabled] {
+  background: #cdcdcd;
+  color: #000;
+  cursor: not-allowed;
+}
+
 input, button  {
   border: 2px solid black;
   border-radius: 2px;

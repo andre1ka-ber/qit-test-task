@@ -8,7 +8,7 @@
     />
     <input v-model="invoiceForm.price" type="number" placeholder="Price" class="invoice-calculator-form__price" />
     <input v-model="invoiceForm.quantity" type="number" placeholder="Qty" class="invoice-calculator-form__quantity" />
-    <button class="add-button" @click="addInvoiceHandler">Add</button>
+    <button class="add-button" @click="addInvoiceHandler" :disabled="!isFormValid">Add</button>
   </form>
 </template>
 
@@ -27,17 +27,16 @@ export default class InvoicesCalculatorForm extends Vue {
 
   public invoiceForm: InvoiceInterface = new Invoice();
 
-  private validate() {
+  get isFormValid() {
     const { name, price, quantity } = this.invoiceForm;
 
-    return name && price && quantity;
+    const priceLowerThanZero = price < 0;
+    const quantityLowerThanZero = quantity < 0;
+
+    return name && price && quantity && !priceLowerThanZero && !quantityLowerThanZero;
   }
 
   public addInvoiceHandler() {
-    if (!this.validate()) {
-      return;
-    }
-
     this.addInvoiceToStore(this.invoiceForm);
     this.invoiceForm = new Invoice();
   }
