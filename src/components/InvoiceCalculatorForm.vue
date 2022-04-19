@@ -37,6 +37,10 @@ export default class InvoicesCalculatorForm extends Vue {
   }
 
   public addInvoiceHandler() {
+    if (!this.isFormValid) {
+      return;
+    }
+
     this.addInvoiceToStore(this.invoiceForm);
     this.invoiceForm = new Invoice();
   }
