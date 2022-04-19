@@ -4,25 +4,24 @@
 
     <invoices-calculator-form />
 
-    <invoice-calculator-table :invoices="invoices" @on-checkbox-change="onCheckboxChange" />
+    <invoice-calculator-table :invoices="invoices" />
 
     <div class="invoice-calculator__summary">
-      <button class="invoice-calculator__button" @click="removeInvoicesHandler">Delete</button>
-      <div class="invoice-calculator__summary__total">
-        <div>Total:</div>
-        <div>{{ totalInvoicesPrice }}$</div>
-      </div>
+      <invoice-calculator-delete-button />
+      <invoice-calculator-summary-total />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Watch, Emit, Vue } from "vue-property-decorator";
+import { Component, Watch, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import { InvoiceInterface } from "@/entities/InvoiceInterface";
 
 import InvoicesCalculatorForm from "@/components/InvoiceCalculatorForm.vue";
 import InvoiceCalculatorTable from "@/components/InvoiceCalculatorTable.vue";
+import InvoiceCalculatorDeleteButton from "@/components/InvoiceCalculatorDeleteButton.vue";
+import InvoiceCalculatorSummaryTotal from "@/components/InvoiceCalculatorSummaryTotal.vue";
 
 const invoicesState = namespace("invoices");
 
@@ -30,36 +29,16 @@ const invoicesState = namespace("invoices");
   components: {
     InvoicesCalculatorForm,
     InvoiceCalculatorTable,
+    InvoiceCalculatorDeleteButton,
+    InvoiceCalculatorSummaryTotal,
   },
 })
 export default class InvoiceCalculator extends Vue {
-  private checkedInvoiceIds: number[] = [];
-
   @invoicesState.State
   public invoices!: InvoiceInterface[];
 
   @invoicesState.Action
-  public removeInvoicesFromStore!: (invoiceIndexes: number[]) => void;
-
-  @invoicesState.Action
   public setInvoicesToStore!: (invoicesToStore: InvoiceInterface[]) => void;
-
-  @Emit()
-  onCheckboxChange(invoices: number[]) {
-    this.checkedInvoiceIds = invoices;
-  }
-
-  public removeInvoicesHandler() {
-    this.removeInvoicesFromStore(this.checkedInvoiceIds);
-  }
-
-  get totalInvoicesPrice() {
-    return this.invoices.reduce((acc, invoice) => {
-      acc += invoice.price * invoice.quantity;
-
-      return acc;
-    }, 0);
-  }
 
   @Watch("invoices", { deep: true })
   invoicesChanged() {

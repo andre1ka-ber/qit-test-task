@@ -30,13 +30,23 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import { namespace } from "vuex-class";
 import { InvoiceInterface } from "@/entities/InvoiceInterface";
+
+const invoicesState = namespace("invoices");
 
 @Component
 export default class InvoiceCalculatorTable extends Vue {
-  private checkedInvoices: number[] = [];
-
   @Prop({ default: [] }) readonly invoices!: InvoiceInterface[];
+
+  @invoicesState.Mutation
+  public addCheckedInvoiceId!: (id: number) => void;
+
+  @invoicesState.Mutation
+  public removeCheckedInvoiceId!: (id: number) => void;
+
+  @invoicesState.Action
+  public setCheckedInvoiceIds!: (ids: number[]) => void;
 
   get noInvoicesAdded() {
     return this.invoices.length === 0;
@@ -46,13 +56,11 @@ export default class InvoiceCalculatorTable extends Vue {
     const target = event.target as HTMLInputElement;
 
     if (target.checked) {
-      this.checkedInvoices.push(invoiceId);
-    } else {
-      const indexToDelete = this.checkedInvoices.indexOf(invoiceId);
-      this.checkedInvoices.splice(indexToDelete, 1);
+      this.addCheckedInvoiceId(invoiceId);
+      return;
     }
 
-    this.$emit("on-checkbox-change", this.checkedInvoices);
+    this.removeCheckedInvoiceId(invoiceId);
   }
 
   public toggleAllInvoices() {
@@ -63,9 +71,9 @@ export default class InvoiceCalculatorTable extends Vue {
       inputElement.checked = !inputElement.checked;
     });
 
-    this.checkedInvoices = this.invoices.map((invoice) => invoice.id);
+    const ids = this.invoices.map((invoice) => invoice.id);
 
-    this.$emit("on-checkbox-change", this.checkedInvoices);
+    this.setCheckedInvoiceIds(ids);
   }
 }
 </script>

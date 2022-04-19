@@ -5,6 +5,8 @@ import { InvoiceInterface } from "@/entities/InvoiceInterface";
 class InvoicesModule extends VuexModule {
   public invoices: InvoiceInterface[] = [];
 
+  public checkedInvoiceIds: number[] = [];
+
   @Mutation
   public pushInvoice(invoice: InvoiceInterface) {
     this.invoices.push(invoice);
@@ -16,6 +18,22 @@ class InvoicesModule extends VuexModule {
       const invoiceIndex = this.invoices.findIndex((invoice) => invoice.id === invoiceId);
       this.invoices.splice(invoiceIndex, 1);
     });
+  }
+
+  @Mutation
+  public setCheckedInvoiceIds(invoiceIds: number[]) {
+    this.checkedInvoiceIds = invoiceIds;
+  }
+
+  @Mutation
+  public addCheckedInvoiceId(invoiceId: number) {
+    this.checkedInvoiceIds.push(invoiceId);
+  }
+
+  @Mutation
+  public removeCheckedInvoiceId(invoiceId: number) {
+    const idIndex = this.checkedInvoiceIds.indexOf(invoiceId);
+    this.checkedInvoiceIds.splice(idIndex, 1);
   }
 
   @Mutation
