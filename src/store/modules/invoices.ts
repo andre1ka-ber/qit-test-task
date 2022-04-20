@@ -18,6 +18,8 @@ class InvoicesModule extends VuexModule {
       const invoiceIndex = this.invoices.findIndex((invoice) => invoice.id === invoiceId);
       this.invoices.splice(invoiceIndex, 1);
     });
+
+    this.checkedInvoiceIds = [];
   }
 
   @Mutation

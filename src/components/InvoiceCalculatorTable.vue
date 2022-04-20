@@ -3,7 +3,7 @@
     <thead>
       <tr>
         <td>
-          <input type="checkbox" @change="toggleAllInvoices" />
+          <input type="checkbox" @change="toggleAllInvoices($event)" />
         </td>
         <td>Product name</td>
         <td>Price</td>
@@ -45,7 +45,7 @@ export default class InvoiceCalculatorTable extends Vue {
   @invoicesState.Mutation
   public removeCheckedInvoiceId!: (id: number) => void;
 
-  @invoicesState.Action
+  @invoicesState.Mutation
   public setCheckedInvoiceIds!: (ids: number[]) => void;
 
   get noInvoicesAdded() {
@@ -63,17 +63,24 @@ export default class InvoiceCalculatorTable extends Vue {
     this.removeCheckedInvoiceId(invoiceId);
   }
 
-  public toggleAllInvoices() {
+  public toggleAllInvoices(event: Event) {
+    const eventTarget = event.target as HTMLInputElement;
+    const targetValue = eventTarget.checked;
+
     const elements = document.querySelectorAll(".invoice-calculator-table tbody input[type=checkbox]");
 
     elements.forEach((element) => {
       const inputElement = element as HTMLInputElement;
-      inputElement.checked = !inputElement.checked;
+      inputElement.checked = targetValue;
     });
 
-    const ids = this.invoices.map((invoice) => invoice.id);
+    if (targetValue) {
+      const ids = this.invoices.map((invoice) => invoice.id);
+      this.setCheckedInvoiceIds(ids);
+      return;
+    }
 
-    this.setCheckedInvoiceIds(ids);
+    this.setCheckedInvoiceIds([]);
   }
 }
 </script>
